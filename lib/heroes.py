@@ -4,3 +4,5 @@ class LINK:
     PLAYER = pygame.image.load('./sprites/link.png')
     PLAYER_POS = [0, 0]
     PLAYER_INV = []
+    HEALTH = 100
+    MANA = 200

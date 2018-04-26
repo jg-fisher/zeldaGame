@@ -30,8 +30,11 @@ TILESIZE = 100
 MAPWIDTH = 7 
 MAPHEIGHT = 7 
 pygame.init()
+pygame.display.set_caption('LINKS ADVENTURE')
 DISPLAYSURFACE = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE+125))
 
 # COLORS
 WHITE = (200, 200, 200)
 BLACK = (0, 0, 0)
+BLUE = (30, 144, 255)
+GREEN = (60, 179, 113)

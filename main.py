@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 from lib import enemies, heroes, items
 from grid import *
+import random
 
 # INSTANCES OF GAME OBJECTS
 PLAYER = heroes.LINK()
@@ -9,15 +10,16 @@ WAND = items.WAND()
 GOLD = items.GOLD()
 BEAST = enemies.BEAST()
 
-print(GOLD.POS)
-
 # OTHER CONFIG
 INVFONT = pygame.font.SysFont('FreeSansBold.ttf', 20)
+HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
+
+# TIMED EVENTS
+# pygame.time.set_timer(USEREVENT + 1, 1500)
 
 GAME_OVER = False
 # GAME LOOP
 while not GAME_OVER:
-
     for event in pygame.event.get():
         print(event)
         if event.type == QUIT:
@@ -35,6 +37,9 @@ while not GAME_OVER:
                 PLAYER.PLAYER_POS[1] -= 1
             elif (event.key == K_DOWN) and PLAYER.PLAYER_POS[1] < MAPHEIGHT - 1:
                 PLAYER.PLAYER_POS[1] += 1
+
+#    if event.type == USEREVENT + 1:
+#        BEAST.MOVE()
 
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
@@ -56,13 +61,23 @@ while not GAME_OVER:
         PLAYER.PLAYER_INV.append(GOLD)
         GOLD.PLACED = False
         
-    INVENTORY_POSITION = 15 
+    INVENTORY_POSITION = 250 
     for item in PLAYER.PLAYER_INV:
         DISPLAYSURFACE.blit(item.IMAGE, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+35))
-        INVENTORY_POSITION += 25 
+        INVENTORY_POSITION += 10 
         INVENTORY_TEXT = INVFONT.render(item.NAME, True, WHITE, BLACK)
-        DISPLAYSURFACE.blit(INVENTORY_TEXT, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+20))
-        INVENTORY_POSITION += 75
+        DISPLAYSURFACE.blit(INVENTORY_TEXT, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+15))
+        INVENTORY_POSITION += 100
+    
+    # HEALTH BAR
+    PLAYER_HEALTH_BAR_TEXT = HEALTHFONT.render('HEALTH:', True, GREEN, BLACK)
+    DISPLAYSURFACE.blit(PLAYER_HEALTH_BAR_TEXT, (15, MAPHEIGHT*TILESIZE+15))
+    DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.HEALTH), True, GREEN, BLACK), (150, MAPHEIGHT*TILESIZE+15))
+
+    # MANA BAR
+    PLAYER_MANA_BAR_TEXT = HEALTHFONT.render('MANA:', True, BLUE, BLACK)
+    DISPLAYSURFACE.blit(PLAYER_MANA_BAR_TEXT, (43.5, MAPHEIGHT*TILESIZE+50))
+    DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.MANA), True, BLUE, BLACK), (150, MAPHEIGHT*TILESIZE+50))
 
     pygame.display.update()
 

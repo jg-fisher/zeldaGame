@@ -15,3 +15,4 @@ class GOLD:
     IMAGE = pygame.image.load('./sprites/gold_coin.png')
     POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
     PLACED = True
+

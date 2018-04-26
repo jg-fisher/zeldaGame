@@ -36,13 +36,25 @@ pygame.init()
 
 DISPLAYSURFACE = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
 
+rand = random.randint
+
 # PLAYER .convertalpha() ?
 PLAYER = pygame.image.load('./sprites/link.png')
 PLAYER_POS = [0, 0]
+PLAYER_INV = []
+
+# ITEMS
+class WAND:
+    WAND = pygame.image.load('./sprites/wand.png')
+    WAND_POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
+    PLACED = True
+
+WAND = WAND()
+print(WAND.WAND_POS)
 
 # ENEMIES
 BEAST = pygame.image.load('./sprites/beast.png')
-BEAST_POS = [random.randint(0, MAPWIDTH-1), random.randint(0, MAPHEIGHT-1)]
+BEAST_POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
 
 print(BEAST_POS)
 
@@ -74,6 +86,13 @@ while not GAME_OVER:
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
             DISPLAYSURFACE.blit(PLAYER, (PLAYER_POS[0]*TILESIZE, PLAYER_POS[1]*TILESIZE))
             DISPLAYSURFACE.blit(BEAST, (BEAST_POS[0]*TILESIZE, BEAST_POS[1]*TILESIZE))
+            if WAND.PLACED:
+                DISPLAYSURFACE.blit(WAND.WAND, (WAND.WAND_POS[0]*TILESIZE, WAND.WAND_POS[1]*TILESIZE))
+    
+    # PICKUP ITEM CONDITIONS
+    if PLAYER_POS == WAND.WAND_POS:
+        PLAYER_INV.append(WAND)
+        WAND.PLACED = False
 
     pygame.display.update()
 

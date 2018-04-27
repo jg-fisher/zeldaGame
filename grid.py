@@ -16,7 +16,7 @@ class Tree:
         self.X_POS = random.randint(100, 600) 
         self.Y_POS = random.randint(100, 700)
 
-num_trees = 10
+num_trees = 15
 trees = [Tree() for x in range (num_trees)]
 
 # DICTIONARY LINKING TILES TO THEIR COLORS pygame.image.load('pic.png')

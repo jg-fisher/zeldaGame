@@ -12,6 +12,7 @@ SWORD = items.SWORD()
 BEAST = enemies.BEAST()
 
 GAME_ITEMS = [WAND, GOLD, SWORD]
+GAME_WEAPONS = [WAND, SWORD]
 
 # OTHER CONFIG
 INVFONT = pygame.font.SysFont('FreeSansBold.ttf', 20)
@@ -38,11 +39,14 @@ counter = 0
 GAME_OVER = False
 # GAME LOOP
 while not GAME_OVER:
+
     for event in pygame.event.get():
         print(event)
+
         if event.type == QUIT:
             pygame.quit()
             sys.exit()
+
         elif (event.type == pygame.locals.KEYDOWN):
             # MOVE RIGHT
             if (event.key == K_RIGHT) and PLAYER.PLAYER_POS[0] < MAPWIDTH - 1:
@@ -77,85 +81,73 @@ while not GAME_OVER:
                 counter = (counter + 1) % len(f_images)
 
             # PLACING DOWN ITEMS
-            elif (event.key == K_SPACE) and WAND  or SWORD in PLAYER.PLAYER_INV:
-                PLAYER.PLAYER_INV = []
-            
-                for item in GAME_ITEMS:
-                    if item.PLACED == False:
-                        item.PLACED = True
+            elif (event.key == K_SPACE) and PLAYER.WEAPON:
+                WEAPON = PLAYER.WEAPON
+                WEAPON.PLACED = True
 
+                # DROP WEAPON LOCATION
                 if PLAYER.DIRECTION == 'd':
-                    for item in GAME_ITEMS:
-                        item.POS[0] = PLAYER.PLAYER_POS[0] 
-                        item.POS[1] = PLAYER.PLAYER_POS[1] - 1
+                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
+                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1] - 1
                 elif PLAYER.DIRECTION == 'u':
-                    for item in GAME_ITEMS:
-                        item.POS[0] = PLAYER.PLAYER_POS[0] 
-                        item.POS[1] = PLAYER.PLAYER_POS[1] + 1
+                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
+                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1] + 1
                 elif PLAYER.DIRECTION == 'r':
-                    for item in GAME_ITEMS:
-                        item.POS[0] = PLAYER.PLAYER_POS[0] - 1
-                        item.POS[1] = PLAYER.PLAYER_POS[1] 
+                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0] - 1
+                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
                 elif PLAYER.DIRECTION == 'l':
-                    for item in GAME_ITEMS:
-                        item.POS[0] = PLAYER.PLAYER_POS[0] + 1
-                        item.POS[1] = PLAYER.PLAYER_POS[1]
-
-#    if event.type == USEREVENT + 1:
-#        BEAST.MOVE()
-
-    for row in range(MAPHEIGHT):
-        for column in range(MAPWIDTH):
-            # SURFACE
-            DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
-
-            # RENDERING ARMED ITEMS WITH PLAYER SPRITE
-            if PLAYER.DIRECTION == 'u':
-                # PLAYER ITEM
-                if WAND in PLAYER.PLAYER_INV:
-                    DISPLAYSURFACE.blit(WAND.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE,  PLAYER.PLAYER_POS[1]*TILESIZE))
-                elif SWORD in PLAYER.PLAYER_INV:
-                    DISPLAYSURFACE.blit(SWORD.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE,  PLAYER.PLAYER_POS[1]*TILESIZE))
-                # PLAYER
-                DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
-            else:
-                # PLAYER
-                DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
-                # PLAYER ITEM
-                if WAND in PLAYER.PLAYER_INV:
-                    DISPLAYSURFACE.blit(WAND.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE,  PLAYER.PLAYER_POS[1]*TILESIZE))
-                elif SWORD in PLAYER.PLAYER_INV:
-                    DISPLAYSURFACE.blit(SWORD.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE,  PLAYER.PLAYER_POS[1]*TILESIZE))
+                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0] + 1
+                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
 
 
-
-            # BEAST
-            DISPLAYSURFACE.blit(BEAST.BEAST, (BEAST.BEAST_POS[0]*TILESIZE, BEAST.BEAST_POS[1]*TILESIZE))
-            for tree in trees:
-                DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
-
-            # SWORD
-            DISPLAYSURFACE.blit(SWORD.IMAGE, (SWORD.POS[0]*TILESIZE, SWORD.POS[1]*TILESIZE))
-
-            if WAND.PLACED:
-                DISPLAYSURFACE.blit(WAND.IMAGE, (WAND.POS[0]*TILESIZE, WAND.POS[1]*TILESIZE))
-            if GOLD.PLACED:
-                DISPLAYSURFACE.blit(GOLD.IMAGE, (GOLD.POS[0]*TILESIZE, GOLD.POS[1]*TILESIZE))
-    
     # PICKUP ITEM CONDITIONS
-
     for item in GAME_ITEMS:
         if PLAYER.PLAYER_POS == item.POS and item.PLACED:
             PLAYER.PLAYER_INV.append(item)
             item.PLACED = False
 
-    INVENTORY_POSITION = 250 
+            # SET TO ARMED WEAPON IF WEAPON
+            if item in GAME_WEAPONS:
+                PLAYER.WEAPON = item
+
+    # RENDER GAME GRID
+    for row in range(MAPHEIGHT):
+        for column in range(MAPWIDTH):
+            DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
+
+    # RENDERING ARMED ITEMS WITH PLAYER SPRITE
+    if PLAYER.DIRECTION == 'u' and PLAYER.WEAPON:
+        DISPLAYSURFACE.blit(PLAYER.WEAPON.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+
+    # RENDER PLAYER
+    DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+
+    # RENDER BEAST
+    DISPLAYSURFACE.blit(BEAST.BEAST, (BEAST.BEAST_POS[0]*TILESIZE, BEAST.BEAST_POS[1]*TILESIZE))
+
+    # RENDER TREES
+    for tree in trees:
+        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
+
+    # RENDER ITEMS
+    for item in GAME_ITEMS:
+            if item.PLACED == True:
+                DISPLAYSURFACE.blit(item.IMAGE, (item.POS[0]*TILESIZE, item.POS[1]*TILESIZE))
+
+    """
+    RENDERING PLAYER INVENTORY (have a render inventory function, that calls a filter function to filter out items)
+    """
+    INVENTORY_POSITION = 250
     for item in PLAYER.PLAYER_INV:
         DISPLAYSURFACE.blit(item.IMAGE, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+35))
         INVENTORY_POSITION += 10 
         INVENTORY_TEXT = INVFONT.render(item.NAME, True, WHITE, BLACK)
         DISPLAYSURFACE.blit(INVENTORY_TEXT, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+15))
         INVENTORY_POSITION += 100
+
+    """
+    RENDERING PLAYER STATS 
+    """
     
     # HEALTH BAR
     PLAYER_HEALTH_BAR_TEXT = HEALTHFONT.render('HEALTH:', True, GREEN, BLACK)
@@ -169,4 +161,5 @@ while not GAME_OVER:
 
     pygame.display.update()
 
+# END OF GAME LOOP
 

@@ -1,8 +1,30 @@
 import pygame.image
+from grid import *
 
 class LINK:
-    PLAYER = pygame.image.load('./sprites/link.png')
-    PLAYER_POS = [0, 0]
-    PLAYER_INV = []
-    HEALTH = 100
-    MANA = 200
+    def __init__(self):
+        self.SPRITE_POS = pygame.image.load('./sprites/link/link_f6.png')
+        self.PLAYER_POS = [0, 0]
+        self.PLAYER_INV = []
+        self.HEALTH = 100
+        self.MANA = 200
+        
+        self.direction = ''
+
+    def UPDATE_SPRITE(self, DIRECTION):
+        """
+        For directional sprite animations.
+
+        'f', 'b', 'r', 'l'
+        """
+        self.direction = DIRECTION
+
+        """
+        if self.direction == 'f':
+
+        elif self.direction == 'b':
+        
+        if self.direction == 'l':
+
+        elif self.direction == 'r':
+        """

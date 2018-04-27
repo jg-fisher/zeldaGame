@@ -17,6 +17,19 @@ HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
 # TIMED EVENTS
 # pygame.time.set_timer(USEREVENT + 1, 1500)
 
+img_path = './sprites/link/link_'
+f_path = img_path + 'f' 
+b_path = img_path + 'b'
+r_path = img_path + 'r'
+l_path =  img_path + 'l'
+
+f_images = [f_path+str(f)+'.png' for f in range(7)]
+b_images = [b_path+str(b)+'.png' for b in range(7)]
+r_images = [r_path+str(r)+'.png' for r in range(7)] 
+l_images = [l_path+str(l)+'.png' for l in range(7)]
+
+counter = 0
+
 GAME_OVER = False
 # GAME LOOP
 while not GAME_OVER:
@@ -29,14 +42,29 @@ while not GAME_OVER:
             # MOVE RIGHT
             if (event.key == K_RIGHT) and PLAYER.PLAYER_POS[0] < MAPWIDTH - 1:
                 PLAYER.PLAYER_POS[0] += 1
+                
+                PLAYER.SPRITE_POS = pygame.image.load(r_images[counter])
+                counter = (counter + 1) % len(r_images)
+                
             # MOVE LEFT
             elif (event.key == K_LEFT) and PLAYER.PLAYER_POS[0] > 0:
                 PLAYER.PLAYER_POS[0] -=1
+
+                PLAYER.SPRITE_POS = pygame.image.load(l_images[counter])
+                counter = (counter + 1) % len(l_images)
+
             # MOVE UP
             elif (event.key == K_UP) and PLAYER.PLAYER_POS[1] > 0:
                 PLAYER.PLAYER_POS[1] -= 1
+                
+                PLAYER.SPRITE_POS = pygame.image.load(b_images[counter])
+                counter = (counter + 1) % len(b_images)
+
             elif (event.key == K_DOWN) and PLAYER.PLAYER_POS[1] < MAPHEIGHT - 1:
                 PLAYER.PLAYER_POS[1] += 1
+
+                PLAYER.SPRITE_POS = pygame.image.load(f_images[counter])
+                counter = (counter + 1) % len(f_images)
 
 #    if event.type == USEREVENT + 1:
 #        BEAST.MOVE()
@@ -44,7 +72,7 @@ while not GAME_OVER:
     for row in range(MAPHEIGHT):
         for column in range(MAPWIDTH):
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
-            DISPLAYSURFACE.blit(PLAYER.PLAYER, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+            DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
             DISPLAYSURFACE.blit(BEAST.BEAST, (BEAST.BEAST_POS[0]*TILESIZE, BEAST.BEAST_POS[1]*TILESIZE))
 
             if WAND.PLACED:

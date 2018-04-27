@@ -74,6 +74,8 @@ while not GAME_OVER:
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
             DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
             DISPLAYSURFACE.blit(BEAST.BEAST, (BEAST.BEAST_POS[0]*TILESIZE, BEAST.BEAST_POS[1]*TILESIZE))
+            for tree in trees:
+                DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
             if WAND.PLACED:
                 DISPLAYSURFACE.blit(WAND.IMAGE, (WAND.POS[0]*TILESIZE, WAND.POS[1]*TILESIZE))

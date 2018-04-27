@@ -1,31 +1,46 @@
 import pygame
+import random
 
 # TILES
 DIRT = 0
 GRASS = 1
 WATER = 2
 WALL = 3
+TREE_0 = 4
+TREE_1 = 5
+TREE_2 = 6
+
+class Tree:
+    def __init__(self):
+        self.SPRITE = pygame.image.load('./textures/trees/tree.png')
+        self.X_POS = random.randint(100, 600) 
+        self.Y_POS = random.randint(100, 700)
+
+num_trees = 10
+trees = [Tree() for x in range (num_trees)]
 
 # DICTIONARY LINKING TILES TO THEIR COLORS pygame.image.load('pic.png')
 TEXTURES = {
     DIRT: pygame.image.load('./textures/dirt.png'),
     GRASS: pygame.image.load('./textures/grass.png'),
     WATER: pygame.image.load('./textures/water.png'),
-    WALL: pygame.image.load('./textures/wall.png')
+    WALL: pygame.image.load('./textures/wall.png'),
+    TREE_0: pygame.image.load('./textures/trees/tree.png'),
+    TREE_1: pygame.image.load('./textures/trees/tree_1.png'),
 }
 
 # TILES TO BE DISPLAYED
 GRID = [
-    [WALL, WALL, WALL, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS],
-    [WALL, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
-    [WALL, GRASS, GRASS, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT],
-    [WALL, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
-    [WALL, WATER, WATER, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
-    [WATER, WATER, WATER, DIRT, WATER, WATER, WATER, WATER, WATER, WATER],
-    [DIRT, DIRT, DIRT, DIRT, WATER, WATER, WATER, WATER, WATER, WATER],
-    [WALL, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
-    [WALL, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
-    [WALL, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT]
+    [GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, GRASS],
+    [GRASS, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
+    [GRASS, GRASS, GRASS, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT],
+    [GRASS, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
+    [GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
+    [DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
+    [DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
+    [GRASS, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
+    [GRASS, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT],
+    [GRASS, GRASS, GRASS, GRASS, DIRT, DIRT, DIRT, DIRT, DIRT, DIRT]
 ]
 
 # GAME DIMENSIONS, CONFIG

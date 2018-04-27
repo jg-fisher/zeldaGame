@@ -9,7 +9,7 @@ class LINK:
         self.HEALTH = 100
         self.MANA = 200
         
-        self.direction = ''
+        self.DIRECTION = ''
 
     def UPDATE_SPRITE(self, DIRECTION):
         """

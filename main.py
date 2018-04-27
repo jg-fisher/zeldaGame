@@ -41,27 +41,27 @@ while not GAME_OVER:
         elif (event.type == pygame.locals.KEYDOWN):
             # MOVE RIGHT
             if (event.key == K_RIGHT) and PLAYER.PLAYER_POS[0] < MAPWIDTH - 1:
-                PLAYER.PLAYER_POS[0] += 1
+                PLAYER.PLAYER_POS[0] += .25
                 
                 PLAYER.SPRITE_POS = pygame.image.load(r_images[counter])
                 counter = (counter + 1) % len(r_images)
                 
             # MOVE LEFT
             elif (event.key == K_LEFT) and PLAYER.PLAYER_POS[0] > 0:
-                PLAYER.PLAYER_POS[0] -=1
+                PLAYER.PLAYER_POS[0] -= .25
 
                 PLAYER.SPRITE_POS = pygame.image.load(l_images[counter])
                 counter = (counter + 1) % len(l_images)
 
             # MOVE UP
             elif (event.key == K_UP) and PLAYER.PLAYER_POS[1] > 0:
-                PLAYER.PLAYER_POS[1] -= 1
+                PLAYER.PLAYER_POS[1] -= .25
                 
                 PLAYER.SPRITE_POS = pygame.image.load(b_images[counter])
                 counter = (counter + 1) % len(b_images)
 
             elif (event.key == K_DOWN) and PLAYER.PLAYER_POS[1] < MAPHEIGHT - 1:
-                PLAYER.PLAYER_POS[1] += 1
+                PLAYER.PLAYER_POS[1] += .25
 
                 PLAYER.SPRITE_POS = pygame.image.load(f_images[counter])
                 counter = (counter + 1) % len(f_images)

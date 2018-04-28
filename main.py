@@ -3,15 +3,19 @@ from pygame.locals import *
 from lib import enemies, heroes, items
 from grid import *
 import random
+from key_events import KeyEvents
 
 # INSTANCES OF GAME OBJECTS
 PLAYER = heroes.LINK()
+key_events = KeyEvents(PLAYER)
+
 WAND = items.WAND()
 GOLD = items.GOLD()
 SWORD = items.SWORD()
 SHIELD = items.SHIELD()
 GANON = enemies.GANON()
 PORTAL = enemies.PORTAL()
+
 
 # GROUPINGS OF RELATED GAME OBJECTS
 GAME_ITEMS = [WAND, GOLD, SWORD, SHIELD]
@@ -33,128 +37,46 @@ pygame.time.set_timer(USEREVENT + 1, 10000)
 # INCREMENT BEAST PORTAL FRAMES
 pygame.time.set_timer(USEREVENT + 2, 400)
 
-# IMAGES FOR LINK ANIMATED WALKING
-img_path = './sprites/link/link_'
-f_path = img_path + 'f' 
-b_path = img_path + 'b'
-r_path = img_path + 'r'
-l_path =  img_path + 'l'
-
-f_images = [f_path+str(f)+'.png' for f in range(7)]
-b_images = [b_path+str(b)+'.png' for b in range(7)]
-r_images = [r_path+str(r)+'.png' for r in range(7)] 
-l_images = [l_path+str(l)+'.png' for l in range(7)]
-
-# IMAGES FOR WOLF LINK ANIMATED WALKING
-img_path = './sprites/wolf/wolf_'
-wolf_f_path = img_path + 'f'
-wolf_b_path = img_path + 'b'
-wolf_r_path = img_path + 'r'
-wolf_l_path = img_path + 'l'
-
-wolf_f_images = [f_path + str(f) + '.png' for f in range(7)]
-wolf_b_images = [wolf_b_path + str(b) + '.png' for b in range(7)]
-wolf_r_images = [wolf_r_path + str(r) + '.png' for r in range(4)]
-wolf_l_images = [wolf_l_path + str(l) + '.png' for l in range(4)]
-
-
 portal_path = './textures/portal/portal_'
 portal_images = [portal_path + str(p) + '.png' for p in range(1, 7)]
 
-counter = 0
-wolf_counter = 0
 
 GAME_OVER = False
 # GAME LOOP
 while not GAME_OVER:
 
     for event in pygame.event.get():
-        print(event)
+
+        key_events.global_events()
 
         if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+            key_events.quit()
 
         elif (event.type == pygame.locals.KEYDOWN):
-        
-            if PLAYER.TRANSFORM:
-                movement = .5
-            else:
-                movement = .25
-
             # MOVE RIGHT
             if (event.key == K_RIGHT) and PLAYER.PLAYER_POS[0] < MAPWIDTH - 1:
-                PLAYER.PLAYER_POS[0] += movement
-                PLAYER.DIRECTION = 'r'
-                
-                PLAYER.SPRITE_POS = pygame.image.load(r_images[counter])
-                counter = (counter + 1) % len(r_images)
+               key_events.key_right() 
 
-                if PLAYER.TRANSFORM:
-                    PLAYER.WOLF  = pygame.image.load(wolf_r_images[wolf_counter])
-                    wolf_counter = (wolf_counter + 1) % len(wolf_r_images)
-                
             # MOVE LEFT
             elif (event.key == K_LEFT) and PLAYER.PLAYER_POS[0] > 0:
-                PLAYER.PLAYER_POS[0] -= movement 
-                PLAYER.DIRECTION = 'l'
-
-                PLAYER.SPRITE_POS = pygame.image.load(l_images[counter])
-                counter = (counter + 1) % len(l_images)
-
-                if PLAYER.TRANSFORM:
-                    PLAYER.WOLF  = pygame.image.load(wolf_l_images[wolf_counter])
-                    wolf_counter = (wolf_counter + 1) % len(wolf_l_images)
+               key_events.key_left() 
 
             # MOVE UP
             elif (event.key == K_UP) and PLAYER.PLAYER_POS[1] > 0:
-                PLAYER.PLAYER_POS[1] -= movement 
-                PLAYER.DIRECTION = 'u'
-                
-                PLAYER.SPRITE_POS = pygame.image.load(b_images[counter])
-                counter = (counter + 1) % len(b_images)
-
-                if PLAYER.TRANSFORM:
-                    PLAYER.WOLF  = pygame.image.load(wolf_b_images[wolf_counter])
-                    wolf_counter = (wolf_counter + 1) % len(wolf_b_images)
+                key_events.key_up()
 
             # MOVE DOWN
             elif (event.key == K_DOWN) and PLAYER.PLAYER_POS[1] < MAPHEIGHT - 1:
-                PLAYER.PLAYER_POS[1] += movement
-                PLAYER.DIRECTION = 'd'
-
-                PLAYER.SPRITE_POS = pygame.image.load(f_images[counter])
-                counter = (counter + 1) % len(f_images)
-
-                if PLAYER.TRANSFORM:
-                    PLAYER.WOLF  = pygame.image.load(wolf_f_images[wolf_counter])
-                    wolf_counter = (wolf_counter + 1) % len(wolf_f_images)
+                key_events.key_down()
 
             # PLACING DOWN ITEMS
             elif (event.key == K_SPACE):
-                if PLAYER.WEAPON:
-                    PLAYER.PLAYER_INV.remove(PLAYER.WEAPON)
-                    PLAYER.WEAPON.PLACED = True
-
-                    # DROP WEAPON LOCATION
-                    if PLAYER.DIRECTION == 'd':
-                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
-                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1] - 1
-                    elif PLAYER.DIRECTION == 'u':
-                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
-                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1] + 1
-                    elif PLAYER.DIRECTION == 'r':
-                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0] - 1
-                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
-                    elif PLAYER.DIRECTION == 'l':
-                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0] + 1
-                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
-                
-                PLAYER.WEAPON = False
+                key_events.key_space()
 
             elif (event.key == K_w):
-                PLAYER.TRANSFORMING()
+                key_events.key_w()
             
+        # GANON W/PORTAL MOVEMENT
         elif (event.type == USEREVENT):
             if PORTAL.FRAME < 5:
                 PORTAL.FRAME += 1
@@ -165,11 +87,13 @@ while not GAME_OVER:
                 GANON.GANON_POS = [x, y]
                 PORTAL.FRAME = 1
         
+        # BEAST OBJECT GENERATOR 
         elif (event.type == USEREVENT + 1):
             NEW_BEAST = enemies.BEAST()
             NEW_BEAST.PORTAL = enemies.PORTAL()
             BEAST_LIST.append(NEW_BEAST)
 
+       # BEAST W/PORTAL GENERATOR 
         elif (event.type == USEREVENT + 2):
             for beast in BEAST_LIST:
                 if beast.PORTAL.FRAME < 5:
@@ -194,12 +118,12 @@ while not GAME_OVER:
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
 
     # RENDER TREES
-    #for tree in sorted(trees, key=lambda t: t.Y_POS):
-    #    DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
+    for tree in sorted(trees, key=lambda t: t.Y_POS):
+        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
     # RENDER PLAYER
     if PLAYER.TRANSFORM:
-        DISPLAYSURFACE.blit(pygame.transform.scale(PLAYER.WOLF, (50, 50)), (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+        DISPLAYSURFACE.blit(PLAYER.WOLF, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
     else:
         DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
 

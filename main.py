@@ -33,7 +33,7 @@ pygame.time.set_timer(USEREVENT + 1, 10000)
 # INCREMENT BEAST PORTAL FRAMES
 pygame.time.set_timer(USEREVENT + 2, 400)
 
-# IMAGES FOR ANIMATED WALKING
+# IMAGES FOR LINK ANIMATED WALKING
 img_path = './sprites/link/link_'
 f_path = img_path + 'f' 
 b_path = img_path + 'b'
@@ -45,10 +45,24 @@ b_images = [b_path+str(b)+'.png' for b in range(7)]
 r_images = [r_path+str(r)+'.png' for r in range(7)] 
 l_images = [l_path+str(l)+'.png' for l in range(7)]
 
+# IMAGES FOR WOLF LINK ANIMATED WALKING
+img_path = './sprites/wolf/wolf_'
+wolf_f_path = img_path + 'f'
+wolf_b_path = img_path + 'b'
+wolf_r_path = img_path + 'r'
+wolf_l_path = img_path + 'l'
+
+wolf_f_images = [f_path + str(f) + '.png' for f in range(7)]
+wolf_b_images = [wolf_b_path + str(b) + '.png' for b in range(7)]
+wolf_r_images = [wolf_r_path + str(r) + '.png' for r in range(4)]
+wolf_l_images = [wolf_l_path + str(l) + '.png' for l in range(4)]
+
+
 portal_path = './textures/portal/portal_'
 portal_images = [portal_path + str(p) + '.png' for p in range(1, 7)]
 
 counter = 0
+wolf_counter = 0
 
 GAME_OVER = False
 # GAME LOOP
@@ -75,6 +89,10 @@ while not GAME_OVER:
                 
                 PLAYER.SPRITE_POS = pygame.image.load(r_images[counter])
                 counter = (counter + 1) % len(r_images)
+
+                if PLAYER.TRANSFORM:
+                    PLAYER.WOLF  = pygame.image.load(wolf_r_images[wolf_counter])
+                    wolf_counter = (wolf_counter + 1) % len(wolf_r_images)
                 
             # MOVE LEFT
             elif (event.key == K_LEFT) and PLAYER.PLAYER_POS[0] > 0:
@@ -84,6 +102,10 @@ while not GAME_OVER:
                 PLAYER.SPRITE_POS = pygame.image.load(l_images[counter])
                 counter = (counter + 1) % len(l_images)
 
+                if PLAYER.TRANSFORM:
+                    PLAYER.WOLF  = pygame.image.load(wolf_l_images[wolf_counter])
+                    wolf_counter = (wolf_counter + 1) % len(wolf_l_images)
+
             # MOVE UP
             elif (event.key == K_UP) and PLAYER.PLAYER_POS[1] > 0:
                 PLAYER.PLAYER_POS[1] -= movement 
@@ -92,6 +114,10 @@ while not GAME_OVER:
                 PLAYER.SPRITE_POS = pygame.image.load(b_images[counter])
                 counter = (counter + 1) % len(b_images)
 
+                if PLAYER.TRANSFORM:
+                    PLAYER.WOLF  = pygame.image.load(wolf_b_images[wolf_counter])
+                    wolf_counter = (wolf_counter + 1) % len(wolf_b_images)
+
             # MOVE DOWN
             elif (event.key == K_DOWN) and PLAYER.PLAYER_POS[1] < MAPHEIGHT - 1:
                 PLAYER.PLAYER_POS[1] += movement
@@ -99,6 +125,10 @@ while not GAME_OVER:
 
                 PLAYER.SPRITE_POS = pygame.image.load(f_images[counter])
                 counter = (counter + 1) % len(f_images)
+
+                if PLAYER.TRANSFORM:
+                    PLAYER.WOLF  = pygame.image.load(wolf_f_images[wolf_counter])
+                    wolf_counter = (wolf_counter + 1) % len(wolf_f_images)
 
             # PLACING DOWN ITEMS
             elif (event.key == K_SPACE):
@@ -169,7 +199,7 @@ while not GAME_OVER:
 
     # RENDER PLAYER
     if PLAYER.TRANSFORM:
-        DISPLAYSURFACE.blit(pygame.transform.scale(PLAYER.WOLF, (100, 100)), (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+        DISPLAYSURFACE.blit(pygame.transform.scale(PLAYER.WOLF, (50, 50)), (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
     else:
         DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
 

@@ -11,7 +11,7 @@ class LINK:
         self.MANA = 200
         self.DIRECTION = False
         self.TRANSFORM = False
-        self.WOLF = pygame.image.load('./sprites/wolflink.png')
+        self.WOLF = pygame.image.load('./sprites/wolf/wolf_f0.png')
     
     def TRANSFORMING(self):
         self.TRANSFORM = not self.TRANSFORM

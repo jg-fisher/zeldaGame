@@ -27,13 +27,10 @@ INVFONT = pygame.font.SysFont('FreeSansBold.ttf', 20)
 HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
 
 # TIMED EVENTS
-
 # GANON MOVEMENT
 pygame.time.set_timer(USEREVENT, 400)
-
 # SPAWN BEAST
 pygame.time.set_timer(USEREVENT + 1, 10000)
-
 # INCREMENT BEAST PORTAL FRAMES
 pygame.time.set_timer(USEREVENT + 2, 400)
 
@@ -102,7 +99,7 @@ while not GAME_OVER:
                 else:
                     beast.APPEAR = True
                     beast.PORTAL_APPEAR = False
-                
+        
     # PICKUP ITEM CONDITIONS
     for item in GAME_ITEMS:
         if PLAYER.PLAYER_POS == item.POS and item.PLACED:

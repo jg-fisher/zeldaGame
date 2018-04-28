@@ -2,9 +2,8 @@ import pygame
 import sys
 
 """
-Lib for all input key events
+Lib for all key events
 """
-
 
 # IMAGES FOR LINK ANIMATED WALKING
 img_path = './sprites/link/link_'

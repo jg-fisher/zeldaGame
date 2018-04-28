@@ -15,3 +15,8 @@ class LINK:
     
     def TRANSFORMING(self):
         self.TRANSFORM = not self.TRANSFORM
+
+class MIDNA:
+    def __init__(self):
+        self.SPRITE_POS = pygame.transform.scale(pygame.image.load('./sprites/midna.png'), (50, 75))
+        self.APPEARED = False

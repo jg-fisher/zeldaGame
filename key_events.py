@@ -94,22 +94,22 @@ class KeyEvents:
 
     def key_space(self):
         if self.PLAYER.WEAPON:
-            self.PLAYER.PLAYER_INV.remove(PLAYER.WEAPON)
+            self.PLAYER.PLAYER_INV.remove(self.PLAYER.WEAPON)
             self.PLAYER.WEAPON.PLACED = True
 
             # DROP WEAPON LOCATION
             if self.PLAYER.DIRECTION == 'd':
-                    self.PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
-                    self.PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1] - 1
+                    self.PLAYER.WEAPON.POS[0] = self.PLAYER.PLAYER_POS[0]
+                    self.PLAYER.WEAPON.POS[1] = self.PLAYER.PLAYER_POS[1] - 1
             elif self.PLAYER.DIRECTION == 'u':
-                    self.PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
-                    self.PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1] + 1
+                    self.PLAYER.WEAPON.POS[0] = self.PLAYER.PLAYER_POS[0]
+                    self.PLAYER.WEAPON.POS[1] = self.PLAYER.PLAYER_POS[1] + 1
             elif self.PLAYER.DIRECTION == 'r':
-                    self.PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0] - 1
-                    self.PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
+                    self.PLAYER.WEAPON.POS[0] = self.PLAYER.PLAYER_POS[0] - 1
+                    self.PLAYER.WEAPON.POS[1] = self.PLAYER.PLAYER_POS[1]
             elif self.PLAYER.DIRECTION == 'l':
-                    self.PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0] + 1
-                    self.PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
+                    self.PLAYER.WEAPON.POS[0] = self.PLAYER.PLAYER_POS[0] + 1
+                    self.PLAYER.WEAPON.POS[1] = self.PLAYER.PLAYER_POS[1]
 
         self.PLAYER.WEAPON = False
     

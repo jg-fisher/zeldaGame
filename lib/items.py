@@ -31,3 +31,9 @@ class GOLD:
     POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
     PLACED = True
 
+class SHIELD:
+    def __init__(self):
+        self.NAME = 'SHIELD'
+        self.IMAGE = pygame.image.load('./sprites/shield.png')
+        self.POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
+        self.PLACED = True

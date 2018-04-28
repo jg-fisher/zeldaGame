@@ -9,9 +9,10 @@ PLAYER = heroes.LINK()
 WAND = items.WAND()
 GOLD = items.GOLD()
 SWORD = items.SWORD()
+SHIELD = items.SHIELD()
 BEAST = enemies.BEAST()
 
-GAME_ITEMS = [WAND, GOLD, SWORD]
+GAME_ITEMS = [WAND, GOLD, SWORD, SHIELD]
 GAME_WEAPONS = [WAND, SWORD]
 
 # OTHER CONFIG
@@ -81,32 +82,33 @@ while not GAME_OVER:
                 counter = (counter + 1) % len(f_images)
 
             # PLACING DOWN ITEMS
-            elif (event.key == K_SPACE) and PLAYER.WEAPON:
-                WEAPON = PLAYER.WEAPON
-                WEAPON.PLACED = True
+            elif (event.key == K_SPACE):
+                if PLAYER.WEAPON:
+                    PLAYER.PLAYER_INV.remove(PLAYER.WEAPON)
+                    PLAYER.WEAPON.PLACED = True
 
-                # DROP WEAPON LOCATION
-                if PLAYER.DIRECTION == 'd':
-                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
-                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1] - 1
-                elif PLAYER.DIRECTION == 'u':
-                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
-                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1] + 1
-                elif PLAYER.DIRECTION == 'r':
-                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0] - 1
-                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
-                elif PLAYER.DIRECTION == 'l':
-                        WEAPON.POS[0] = PLAYER.PLAYER_POS[0] + 1
-                        WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
-
+                    # DROP WEAPON LOCATION
+                    if PLAYER.DIRECTION == 'd':
+                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
+                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1] - 1
+                    elif PLAYER.DIRECTION == 'u':
+                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0]
+                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1] + 1
+                    elif PLAYER.DIRECTION == 'r':
+                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0] - 1
+                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
+                    elif PLAYER.DIRECTION == 'l':
+                            PLAYER.WEAPON.POS[0] = PLAYER.PLAYER_POS[0] + 1
+                            PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
+                
+                PLAYER.WEAPON = False
 
     # PICKUP ITEM CONDITIONS
     for item in GAME_ITEMS:
         if PLAYER.PLAYER_POS == item.POS and item.PLACED:
             PLAYER.PLAYER_INV.append(item)
             item.PLACED = False
-
-            # SET TO ARMED WEAPON IF WEAPON
+            # IF PICKED UP WEAPON ARM IT
             if item in GAME_WEAPONS:
                 PLAYER.WEAPON = item
 
@@ -115,19 +117,19 @@ while not GAME_OVER:
         for column in range(MAPWIDTH):
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
 
-    # RENDERING ARMED ITEMS WITH PLAYER SPRITE
-    if PLAYER.DIRECTION == 'u' and PLAYER.WEAPON:
-        DISPLAYSURFACE.blit(PLAYER.WEAPON.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+    # RENDER TREES
+    for tree in trees:
+        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
     # RENDER PLAYER
     DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
 
+    # RENDERING ARMED ITEMS WITH PLAYER SPRITE
+    if PLAYER.WEAPON:
+        DISPLAYSURFACE.blit(PLAYER.WEAPON.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+
     # RENDER BEAST
     DISPLAYSURFACE.blit(BEAST.BEAST, (BEAST.BEAST_POS[0]*TILESIZE, BEAST.BEAST_POS[1]*TILESIZE))
-
-    # RENDER TREES
-    for tree in trees:
-        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
     # RENDER ITEMS
     for item in GAME_ITEMS:

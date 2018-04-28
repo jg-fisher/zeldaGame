@@ -1,3 +1,9 @@
+# OSX finder
+*.DS_Store
+
+# vim files
+*.swp
+
 i# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

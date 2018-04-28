@@ -13,9 +13,10 @@ class BEAST:
     def __init__(self):
         self.BEAST = pygame.image.load('./sprites/beast.png')
         self.PORTAL = False
-        self.PORTAL_APPEAR = False
+        self.PORTAL_APPEAR = True
         self.APPEAR = False 
         self.POS = []
+        self.SUMMONED = False
 
 class PORTAL:
     def __init__(self):

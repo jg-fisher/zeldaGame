@@ -34,9 +34,12 @@ HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
 # GANON MOVEMENT
 pygame.time.set_timer(USEREVENT, 400)
 # SPAWN BEAST
-pygame.time.set_timer(USEREVENT + 1, 10000)
+pygame.time.set_timer(USEREVENT + 1, 5000)
 # INCREMENT BEAST PORTAL FRAMES
 pygame.time.set_timer(USEREVENT + 2, 400)
+
+# MOVE BEASTS
+pygame.time.set_timer(USEREVENT + 3, 1000)
 
 portal_path = './textures/portal/portal_'
 portal_images = [portal_path + str(p) + '.png' for p in range(1, 7)]
@@ -97,13 +100,23 @@ while not GAME_OVER:
        # BEAST W/PORTAL GENERATOR 
         elif (event.type == USEREVENT + 2):
             for beast in BEAST_LIST:
-                if beast.PORTAL.FRAME < 5:
-                    beast.PORTAL_APPEAR = True
+                if beast.PORTAL_APPEAR and beast.PORTAL.FRAME < 5:
                     beast.PORTAL.FRAME += 1
-                else:
-                    beast.APPEAR = True
+                elif not beast.SUMMONED:
                     beast.PORTAL_APPEAR = False
+                    beast.APPEAR = True
+                    beast.SUMMONED = True
+                    beast.POS = [beast.PORTAL.POS[0], beast.PORTAL.POS[1]]
         
+        elif (event.type == USEREVENT + 3):
+            for beast in BEAST_LIST:
+                if beast.APPEAR:
+                    for coordinate in range(len(beast.POS)):
+                        if PLAYER.PLAYER_POS[coordinate] > beast.POS[coordinate]:
+                            beast.POS[coordinate] += 1
+                        else:
+                            beast.POS[coordinate] -= 1
+
     # PICKUP ITEM CONDITIONS
     for item in GAME_ITEMS:
         if PLAYER.PLAYER_POS == item.POS and item.PLACED:
@@ -118,9 +131,6 @@ while not GAME_OVER:
         for column in range(MAPWIDTH):
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
 
-    # RENDER TREES
-    for tree in sorted(trees, key=lambda t: t.Y_POS):
-        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
     # RENDER PLAYER
     if PLAYER.TRANSFORM:
@@ -157,11 +167,9 @@ while not GAME_OVER:
         # RENDER PORTALS
         if beast.PORTAL_APPEAR:
             DISPLAYSURFACE.blit(pygame.image.load(portal_images[beast.PORTAL.FRAME]), (beast.PORTAL.POS[0]*TILESIZE, beast.PORTAL.POS[1]*TILESIZE))
-            print(beast.PORTAL.POS[0])
         # RENDER BEASTS
         if beast.APPEAR:
-            DISPLAYSURFACE.blit(beast.BEAST, (beast.PORTAL.POS[0]*TILESIZE, beast.PORTAL.POS[1]*TILESIZE))
-            print(beast.PORTAL.POS[0])
+            DISPLAYSURFACE.blit(beast.BEAST, (beast.POS[0]*TILESIZE, beast.POS[1]*TILESIZE))
 
     # RENDER ITEMS
     for item in GAME_ITEMS:
@@ -193,7 +201,12 @@ while not GAME_OVER:
     DISPLAYSURFACE.blit(PLAYER_MANA_BAR_TEXT, (43.5, MAPHEIGHT*TILESIZE+50))
     DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.MANA), True, BLUE, BLACK), (150, MAPHEIGHT*TILESIZE+50))
 
+    # RENDER TREES
+    for tree in sorted(trees, key=lambda t: t.Y_POS):
+        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
+
     pygame.display.update()
+
 
 # END OF GAME LOOP
 

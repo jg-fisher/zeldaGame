@@ -51,7 +51,7 @@ GRID = [
 
 # GAME DIMENSIONS, CONFIG
 TILESIZE = 75 
-MAPWIDTH = 20
+MAPWIDTH = 10
 MAPHEIGHT = 10 
 pygame.init()
 pygame.display.set_caption('LINKS ADVENTURE')

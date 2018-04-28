@@ -12,6 +12,10 @@ class LINK:
         self.DIRECTION = False
         self.TRANSFORM = False
         self.WOLF = pygame.image.load('./sprites/wolf/wolf_f0.png')
+
+        # for collisions
+        self.rect = self.SPRITE_POS.get_rect(center=(self.PLAYER_POS[0], self.PLAYER_POS[1]))
+
     
     def TRANSFORMING(self):
         self.TRANSFORM = not self.TRANSFORM

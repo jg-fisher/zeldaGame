@@ -21,7 +21,12 @@ INVFONT = pygame.font.SysFont('FreeSansBold.ttf', 20)
 HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
 
 # TIMED EVENTS
+
+# GANON MOVEMENT
 pygame.time.set_timer(USEREVENT, 250)
+
+# SPAWN BEAST
+pygame.time.set_timer(USEREVENT + 1, 5000)
 
 
 # IMAGES FOR ANIMATED WALKING
@@ -36,10 +41,14 @@ b_images = [b_path+str(b)+'.png' for b in range(7)]
 r_images = [r_path+str(r)+'.png' for r in range(7)] 
 l_images = [l_path+str(l)+'.png' for l in range(7)]
 
+beast_list = []
+portal_list = []
 portal_path = './textures/portal/portal_'
 portal_images = [portal_path + str(p) + '.png' for p in range(1, 7)]
 
 counter = 0
+
+
 
 GAME_OVER = False
 # GAME LOOP
@@ -116,6 +125,19 @@ while not GAME_OVER:
                 PORTAL.POS = [x, y]
                 GANON.GANON_POS = [x, y]
                 PORTAL.FRAME = 1
+        
+        elif (event.type == USEREVENT + 1):
+            NEW_BEAST = enemies.BEAST()
+            NEW_BEAST.PORTAL = enemies.PORTAL()
+            beast_list.append(NEW_BEAST)
+
+            for beast in beast_list:
+                if beast.PORTAL.FRAME < 5:
+                    beast.PORTAL_APPEAR = True
+                    beast.PORTAL.FRAME += 1
+                else:
+                    beast.APPEAR = True
+                    beast.PORTAL_APPEAR = False
                 
     # PICKUP ITEM CONDITIONS
     for item in GAME_ITEMS:
@@ -150,6 +172,16 @@ while not GAME_OVER:
     # RENDER GANON
     DISPLAYSURFACE.blit(GANON.GANON, (GANON.GANON_POS[0]*TILESIZE, GANON.GANON_POS[1]*TILESIZE))
 
+    # RENDER BEASTS AND BEASTS
+    for beast in beast_list:
+        # RENDER PORTALS
+        if beast.PORTAL_APPEAR:
+            DISPLAYSURFACE.blit(pygame.image.load(portal_images[beast.PORTAL.FRAME]), (beast.PORTAL.POS[0]*TILESIZE, beast.PORTAL.POS[1]*TILESIZE))
+            print(beast.PORTAL.POS[0])
+        # RENDER BEASTS
+        if beast.APPEAR:
+            DISPLAYSURFACE.blit(beast.BEAST, (beast.PORTAL.POS[0]*TILESIZE, beast.PORTAL.POS[1]*TILESIZE))
+            print(beast.PORTAL.POS[0])
 
     # RENDER ITEMS
     for item in GAME_ITEMS:

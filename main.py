@@ -10,7 +10,8 @@ WAND = items.WAND()
 GOLD = items.GOLD()
 SWORD = items.SWORD()
 SHIELD = items.SHIELD()
-BEAST = enemies.BEAST()
+GANON = enemies.GANON()
+PORTAL = enemies.PORTAL()
 
 GAME_ITEMS = [WAND, GOLD, SWORD, SHIELD]
 GAME_WEAPONS = [WAND, SWORD]
@@ -20,7 +21,7 @@ INVFONT = pygame.font.SysFont('FreeSansBold.ttf', 20)
 HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
 
 # TIMED EVENTS
-# pygame.time.set_timer(USEREVENT + 1, 1500)
+pygame.time.set_timer(USEREVENT, 250)
 
 
 # IMAGES FOR ANIMATED WALKING
@@ -34,6 +35,9 @@ f_images = [f_path+str(f)+'.png' for f in range(7)]
 b_images = [b_path+str(b)+'.png' for b in range(7)]
 r_images = [r_path+str(r)+'.png' for r in range(7)] 
 l_images = [l_path+str(l)+'.png' for l in range(7)]
+
+portal_path = './textures/portal/portal_'
+portal_images = [portal_path + str(p) + '.png' for p in range(1, 7)]
 
 counter = 0
 
@@ -102,7 +106,17 @@ while not GAME_OVER:
                             PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
                 
                 PLAYER.WEAPON = False
-
+            
+        elif (event.type == USEREVENT):
+            if PORTAL.FRAME < 5:
+                PORTAL.FRAME += 1
+            else:
+                x = random.randint(1, 9)
+                y = random.randint(1, 9)
+                PORTAL.POS = [x, y]
+                GANON.GANON_POS = [x, y]
+                PORTAL.FRAME = 1
+                
     # PICKUP ITEM CONDITIONS
     for item in GAME_ITEMS:
         if PLAYER.PLAYER_POS == item.POS and item.PLACED:
@@ -117,8 +131,9 @@ while not GAME_OVER:
         for column in range(MAPWIDTH):
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
 
+    # sort trees by y coordinate low ---> high before rendering 
     # RENDER TREES
-    for tree in trees:
+    for tree in sorted(trees, key=lambda t: t.Y_POS):
         DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
     # RENDER PLAYER
@@ -128,8 +143,13 @@ while not GAME_OVER:
     if PLAYER.WEAPON:
         DISPLAYSURFACE.blit(PLAYER.WEAPON.IMAGE_ARMED, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
 
-    # RENDER BEAST
-    DISPLAYSURFACE.blit(BEAST.BEAST, (BEAST.BEAST_POS[0]*TILESIZE, BEAST.BEAST_POS[1]*TILESIZE))
+    # RENDER PORTAL
+    print(PORTAL.FRAME)
+    DISPLAYSURFACE.blit(pygame.image.load(portal_images[PORTAL.FRAME]), (GANON.GANON_POS[0]*TILESIZE, GANON.GANON_POS[1]*TILESIZE))
+
+    # RENDER GANON
+    DISPLAYSURFACE.blit(GANON.GANON, (GANON.GANON_POS[0]*TILESIZE, GANON.GANON_POS[1]*TILESIZE))
+
 
     # RENDER ITEMS
     for item in GAME_ITEMS:

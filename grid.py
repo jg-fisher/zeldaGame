@@ -12,8 +12,8 @@ TREE_2 = 6
 
 class Tree:
     def __init__(self):
-        self.SPRITE = pygame.image.load('./textures/trees/tree.png')
-        self.X_POS = random.randint(100, 600) 
+        self.SPRITE = pygame.transform.scale(pygame.image.load('./textures/trees/tree.png'), (125, 125))
+        self.X_POS = random.randint(100, 600)
         self.Y_POS = random.randint(100, 700)
 
 num_trees = 15

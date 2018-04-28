@@ -4,11 +4,17 @@ import random
 
 rand = random.randint
 
+class GANON:
+    def __init__(self):
+        self.GANON = pygame.image.load('./sprites/ganon.png')
+        self.GANON_POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
+
 class BEAST:
     def __init__(self):
-        self.BEAST = pygame.image.load('./sprites/ganon.png')
-        self.BEAST_POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
-    
-    def MOVE(self):
-        self.BEAST_POS[0] += rand(-1, 1)
-        self.BEAST_POS[1] += rand(-1, 1)
+        self.BEAST = pygame.image.load('./sprites/beast.png')
+
+class PORTAL:
+    def __init__(self):
+        self.PORTAL = pygame.image.load('./textures/portal/portal_1.png')
+        self.POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
+        self.FRAME = 0

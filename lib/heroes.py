@@ -10,4 +10,8 @@ class LINK:
         self.HEALTH = 100
         self.MANA = 200
         self.DIRECTION = False
-
+        self.TRANSFORM = False
+        self.WOLF = pygame.image.load('./sprites/wolflink.png')
+    
+    def TRANSFORMING(self):
+        self.TRANSFORM = not self.TRANSFORM

@@ -13,8 +13,10 @@ SHIELD = items.SHIELD()
 GANON = enemies.GANON()
 PORTAL = enemies.PORTAL()
 
+# GROUPINGS OF RELATED GAME OBJECTS
 GAME_ITEMS = [WAND, GOLD, SWORD, SHIELD]
 GAME_WEAPONS = [WAND, SWORD]
+BEAST_LIST = []
 
 # OTHER CONFIG
 INVFONT = pygame.font.SysFont('FreeSansBold.ttf', 20)
@@ -23,11 +25,13 @@ HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
 # TIMED EVENTS
 
 # GANON MOVEMENT
-pygame.time.set_timer(USEREVENT, 250)
+pygame.time.set_timer(USEREVENT, 400)
 
 # SPAWN BEAST
-pygame.time.set_timer(USEREVENT + 1, 5000)
+pygame.time.set_timer(USEREVENT + 1, 10000)
 
+# INCREMENT BEAST PORTAL FRAMES
+pygame.time.set_timer(USEREVENT + 2, 400)
 
 # IMAGES FOR ANIMATED WALKING
 img_path = './sprites/link/link_'
@@ -41,14 +45,10 @@ b_images = [b_path+str(b)+'.png' for b in range(7)]
 r_images = [r_path+str(r)+'.png' for r in range(7)] 
 l_images = [l_path+str(l)+'.png' for l in range(7)]
 
-beast_list = []
-portal_list = []
 portal_path = './textures/portal/portal_'
 portal_images = [portal_path + str(p) + '.png' for p in range(1, 7)]
 
 counter = 0
-
-
 
 GAME_OVER = False
 # GAME LOOP
@@ -62,9 +62,15 @@ while not GAME_OVER:
             sys.exit()
 
         elif (event.type == pygame.locals.KEYDOWN):
+        
+            if PLAYER.TRANSFORM:
+                movement = .5
+            else:
+                movement = .25
+
             # MOVE RIGHT
             if (event.key == K_RIGHT) and PLAYER.PLAYER_POS[0] < MAPWIDTH - 1:
-                PLAYER.PLAYER_POS[0] += .25
+                PLAYER.PLAYER_POS[0] += movement
                 PLAYER.DIRECTION = 'r'
                 
                 PLAYER.SPRITE_POS = pygame.image.load(r_images[counter])
@@ -72,7 +78,7 @@ while not GAME_OVER:
                 
             # MOVE LEFT
             elif (event.key == K_LEFT) and PLAYER.PLAYER_POS[0] > 0:
-                PLAYER.PLAYER_POS[0] -= .25
+                PLAYER.PLAYER_POS[0] -= movement 
                 PLAYER.DIRECTION = 'l'
 
                 PLAYER.SPRITE_POS = pygame.image.load(l_images[counter])
@@ -80,7 +86,7 @@ while not GAME_OVER:
 
             # MOVE UP
             elif (event.key == K_UP) and PLAYER.PLAYER_POS[1] > 0:
-                PLAYER.PLAYER_POS[1] -= .25
+                PLAYER.PLAYER_POS[1] -= movement 
                 PLAYER.DIRECTION = 'u'
                 
                 PLAYER.SPRITE_POS = pygame.image.load(b_images[counter])
@@ -88,7 +94,7 @@ while not GAME_OVER:
 
             # MOVE DOWN
             elif (event.key == K_DOWN) and PLAYER.PLAYER_POS[1] < MAPHEIGHT - 1:
-                PLAYER.PLAYER_POS[1] += .25
+                PLAYER.PLAYER_POS[1] += movement
                 PLAYER.DIRECTION = 'd'
 
                 PLAYER.SPRITE_POS = pygame.image.load(f_images[counter])
@@ -115,6 +121,9 @@ while not GAME_OVER:
                             PLAYER.WEAPON.POS[1] = PLAYER.PLAYER_POS[1]
                 
                 PLAYER.WEAPON = False
+
+            elif (event.key == K_w):
+                PLAYER.TRANSFORMING()
             
         elif (event.type == USEREVENT):
             if PORTAL.FRAME < 5:
@@ -129,9 +138,10 @@ while not GAME_OVER:
         elif (event.type == USEREVENT + 1):
             NEW_BEAST = enemies.BEAST()
             NEW_BEAST.PORTAL = enemies.PORTAL()
-            beast_list.append(NEW_BEAST)
+            BEAST_LIST.append(NEW_BEAST)
 
-            for beast in beast_list:
+        elif (event.type == USEREVENT + 2):
+            for beast in BEAST_LIST:
                 if beast.PORTAL.FRAME < 5:
                     beast.PORTAL_APPEAR = True
                     beast.PORTAL.FRAME += 1
@@ -153,13 +163,15 @@ while not GAME_OVER:
         for column in range(MAPWIDTH):
             DISPLAYSURFACE.blit(TEXTURES[GRID[row][column]], (column*TILESIZE, row*TILESIZE))
 
-    # sort trees by y coordinate low ---> high before rendering 
     # RENDER TREES
-    for tree in sorted(trees, key=lambda t: t.Y_POS):
-        DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
+    #for tree in sorted(trees, key=lambda t: t.Y_POS):
+    #    DISPLAYSURFACE.blit(tree.SPRITE, (tree.X_POS, tree.Y_POS))
 
     # RENDER PLAYER
-    DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+    if PLAYER.TRANSFORM:
+        DISPLAYSURFACE.blit(pygame.transform.scale(PLAYER.WOLF, (100, 100)), (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
+    else:
+        DISPLAYSURFACE.blit(PLAYER.SPRITE_POS, (PLAYER.PLAYER_POS[0]*TILESIZE, PLAYER.PLAYER_POS[1]*TILESIZE))
 
     # RENDERING ARMED ITEMS WITH PLAYER SPRITE
     if PLAYER.WEAPON:
@@ -173,7 +185,7 @@ while not GAME_OVER:
     DISPLAYSURFACE.blit(GANON.GANON, (GANON.GANON_POS[0]*TILESIZE, GANON.GANON_POS[1]*TILESIZE))
 
     # RENDER BEASTS AND BEASTS
-    for beast in beast_list:
+    for beast in BEAST_LIST:
         # RENDER PORTALS
         if beast.PORTAL_APPEAR:
             DISPLAYSURFACE.blit(pygame.image.load(portal_images[beast.PORTAL.FRAME]), (beast.PORTAL.POS[0]*TILESIZE, beast.PORTAL.POS[1]*TILESIZE))

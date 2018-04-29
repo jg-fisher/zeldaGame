@@ -19,8 +19,8 @@ PORTAL = enemies.PORTAL()
 TEMPLE = TEMPLE()
 
 # GROUPINGS OF RELATED GAME OBJECTS
-GAME_ITEMS = [WAND, SWORD, SHIELD, BOW]
-GAME_WEAPONS = [WAND, SWORD, BOW]
+GAME_ITEMS = [WAND, SWORD, SHIELD]
+GAME_WEAPONS = [WAND, BOW]
 BEAST_LIST = []
 orbs_list = []
 
@@ -56,14 +56,17 @@ while not GAME_OVER:
         GANON.VULNERABLE = False
 
     for event in pygame.event.get():
-    
+
         keys = pygame.key.get_pressed()
         key_events.global_events()
     
         if event.type == QUIT:
             key_events.quit()
     
-            # MOVE RIGHT
+        if keys[K_w] and keys[K_t]:
+            key_events.key_w()
+
+        # MOVE RIGHT
         if (keys[K_RIGHT]) and PLAYER.PLAYER_POS[0] < MAPWIDTH - 1:
            key_events.key_right() 
     
@@ -83,10 +86,7 @@ while not GAME_OVER:
         if (keys[K_SPACE]):
             key_events.key_space()
     
-        if (keys[K_t]):
-            key_events.key_w()
-
-            # FIRE ORB FROM WAND
+        # FIRE ORB FROM WAND
         if (keys[K_f]):
             if PLAYER.WEAPON == WAND:
                 orbs_list.append(heroes.ORB(math.ceil(PLAYER.PLAYER_POS[0]), math.ceil(PLAYER.PLAYER_POS[1]), PLAYER.DIRECTION))
@@ -206,6 +206,7 @@ while not GAME_OVER:
                 if orb.POS == beast.POS:
                     beast.APPEAR = False
                     BEAST_LIST.remove(beast)
+                    orbs_list.remove(orb)
         if orb.POS[0] > MAPWIDTH or orb.POS[0] < 0 or orb.POS[1] > MAPHEIGHT or orb.POS[1] < 0: 
             orbs_list.remove(orb)
 
@@ -220,15 +221,15 @@ while not GAME_OVER:
         DISPLAYSURFACE.blit(INVENTORY_TEXT, (INVENTORY_POSITION, MAPHEIGHT*TILESIZE+15))
         INVENTORY_POSITION += 100
 
-    # RENDER HEALTH BAR
-    PLAYER_HEALTH_BAR_TEXT = HEALTHFONT.render('HEALTH:', True, GREEN, BLACK)
-    DISPLAYSURFACE.blit(PLAYER_HEALTH_BAR_TEXT, (15, MAPHEIGHT*TILESIZE+15))
-    DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.HEALTH), True, GREEN, BLACK), (150, MAPHEIGHT*TILESIZE+15))
+    # RENDER PLAYER HEALTH BAR
+    PLAYER_HEALTH_BAR_TEXT = HEALTHFONT.render('LINK HEALTH:', True, GREEN, BLACK)
+    DISPLAYSURFACE.blit(PLAYER_HEALTH_BAR_TEXT, (15, MAPHEIGHT*TILESIZE-500))
+    DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.HEALTH), True, GREEN, BLACK), (225, MAPHEIGHT*TILESIZE - 500))
 
-    # RENDER MANA BAR
-    PLAYER_MANA_BAR_TEXT = HEALTHFONT.render('MANA:', True, BLUE, BLACK)
-    DISPLAYSURFACE.blit(PLAYER_MANA_BAR_TEXT, (43.5, MAPHEIGHT*TILESIZE+50))
-    DISPLAYSURFACE.blit(HEALTHFONT.render(str(PLAYER.MANA), True, BLUE, BLACK), (150, MAPHEIGHT*TILESIZE+50))
+    # RENDER GANON HEALTH BAR
+    PLAYER_MANA_BAR_TEXT = HEALTHFONT.render('GANON HEALTH:', True, RED, BLACK)
+    DISPLAYSURFACE.blit(PLAYER_MANA_BAR_TEXT, (650, MAPHEIGHT*TILESIZE-500))
+    DISPLAYSURFACE.blit(HEALTHFONT.render(str(GANON.HEALTH), True, RED, BLACK), (900, MAPHEIGHT*TILESIZE-500))
 
     # RENDER TREES
     for tree in sorted(trees, key=lambda t: t.Y_POS):

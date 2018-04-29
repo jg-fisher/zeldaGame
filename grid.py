@@ -13,14 +13,14 @@ TREE_2 = 6
 class Tree:
     def __init__(self):
         self.SPRITE = pygame.transform.scale(pygame.image.load('./textures/trees/tree.png'), (125, 125))
-        self.X_POS = random.randint(100, 600)
-        self.Y_POS = random.randint(100, 700)
+        self.X_POS = random.randint(50, 300)
+        self.Y_POS = random.randint(50, 450)
 
 class TEMPLE:
     def __init__(self):
         self.SPRITE = pygame.transform.scale(pygame.image.load('./sprites/temple.png'), (250, 250))
-        self.X_POS = .5
-        self.Y_POS = .2 
+        self.X_POS = 6
+        self.Y_POS = 1
 
 num_trees = 15
 trees = [Tree() for x in range (num_trees)]
@@ -50,7 +50,7 @@ GRID = [
 ]
 
 # GAME DIMENSIONS, CONFIG
-TILESIZE = 75 
+TILESIZE = 50
 MAPWIDTH = 20
 MAPHEIGHT = 10 
 pygame.init()
@@ -63,3 +63,4 @@ WHITE = (200, 200, 200)
 BLACK = (0, 0, 0)
 BLUE = (30, 144, 255)
 GREEN = (60, 179, 113)
+RED = (178, 0, 0)

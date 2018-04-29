@@ -8,7 +8,7 @@ class GANON:
     def __init__(self):
         self.GANON = pygame.image.load('./sprites/ganon.png')
         self.GANON_POS = [rand(0, MAPWIDTH-1), rand(0, MAPHEIGHT-1)]
-        self.HEALTH = 100
+        self.HEALTH = 250
         self.VULNERABLE = True
 
 class BEAST:

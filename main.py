@@ -25,11 +25,15 @@ TEMPLE = TEMPLE()
 GAME_ITEMS = [WAND, GOLD, SWORD, SHIELD, BOW]
 GAME_WEAPONS = [WAND, SWORD, BOW]
 BEAST_LIST = []
+orbs_list = []
 
 # OTHER CONFIG
 INVFONT = pygame.font.SysFont('FreeSansBold.ttf', 20)
 HEALTHFONT = pygame.font.SysFont('FreeSansBold.ttf', 40)
 
+
+
+# MAKE A WORKER EVENT FOR OBS IN ORB LIST MOVE POSITION IN DIRECTION EVERY 1s
 # TIMED EVENTS
 # GANON MOVEMENT
 pygame.time.set_timer(USEREVENT, 400)
@@ -74,12 +78,18 @@ while not GAME_OVER:
                 key_events.key_down()
 
             # PLACING DOWN ITEMS
-            elif (event.key == K_SPACE):
+            elif event.key == K_SPACE:
                 key_events.key_space()
 
-            elif (event.key == K_w):
+            # TRANSFORM TO WOLF
+            elif event.key == K_w:
                 key_events.key_w()
-            
+
+            # FIRE ORB
+            elif event.key == K_f:
+                if PLAYER.WEAPON == WAND:
+                    orbs_list.append(heroes.ORB(PLAYER.PLAYER_POS[0], PLAYER.PLAYER_POS[1], PLAYER.DIRECTION))
+
         # GANON W/PORTAL MOVEMENT
         elif (event.type == USEREVENT):
             if PORTAL.FRAME < 5:
@@ -116,6 +126,7 @@ while not GAME_OVER:
                             beast.POS[coordinate] += 1
                         else:
                             beast.POS[coordinate] -= 1
+
 
     # PICKUP ITEM CONDITIONS
     for item in GAME_ITEMS:
@@ -175,6 +186,18 @@ while not GAME_OVER:
     for item in GAME_ITEMS:
             if item.PLACED == True:
                 DISPLAYSURFACE.blit(item.IMAGE, (item.POS[0]*TILESIZE, item.POS[1]*TILESIZE))
+
+    # RENDER ORBS
+    for orb in orbs_list:
+        if orb.POS == GANON.GANON_POS and GANON.VULNERABLE:
+            GANON.HEALTH -= 10
+            print(GANON.HEALTH)
+        for beast in BEAST_LIST:
+            print(orb.POS)
+            print(beast.POS)
+            if orb.POS == beast.POS:
+                beast.APPEAR -= False
+        DISPLAYSURFACE.blit(orb.IMAGE, (orb.POS[0]*TILESIZE, orb.POS[1]*TILESIZE))
 
     """
     RENDERING PLAYER INVENTORY (have a render inventory function, that calls a filter function to filter out items)

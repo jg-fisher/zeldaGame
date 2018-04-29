@@ -29,6 +29,7 @@ wolf_b_images = [wolf_b_path + str(b) + '.png' for b in range(7)]
 wolf_r_images = [wolf_r_path + str(r) + '.png' for r in range(4)]
 wolf_l_images = [wolf_l_path + str(l) + '.png' for l in range(4)]
 
+
 class KeyEvents:
     def __init__(self, PLAYER):
         self.PLAYER = PLAYER
@@ -36,6 +37,7 @@ class KeyEvents:
         self.wolf_counter = 0
         self.wolf_counter_lr = 0
         self.movement = .25
+        self.orbs = []
 
     def global_events(self):
         if self.PLAYER.TRANSFORM:

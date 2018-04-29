@@ -239,12 +239,13 @@ while not GAME_OVER:
     DISPLAYSURFACE.blit(GANON.GANON, (GANON.GANON_POS[0]*TILESIZE, GANON.GANON_POS[1]*TILESIZE))
     pygame.display.update()
 
-    if PLAYER.HEALTH == 0:
-        print('YOU LOSE.')
-        GAME_OVER == True
-    elif GANON.HEALTH == 0:
-        print('YOU WIN.')
-        GAME_OVER == True
+    if GANON.HEALTH <= 0:
+        GAME_OVER = True
+        print('GAME OVER, YOU WIN!')
+    
+    if PLAYER.HEALTH <= 0:
+        GAME_OVER = True
+        print('GAME OVER, YOU LOSE')
 
 # END OF GAME LOOP
 

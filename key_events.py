@@ -41,7 +41,7 @@ class KeyEvents:
 
     def global_events(self):
         if self.PLAYER.TRANSFORM:
-            self.movement = .5
+            self.movement =  .5
         else:
             self.movement = .25
 

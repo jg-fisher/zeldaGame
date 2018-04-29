@@ -19,7 +19,7 @@ class Tree:
 class TEMPLE:
     def __init__(self):
         self.SPRITE = pygame.transform.scale(pygame.image.load('./sprites/temple.png'), (250, 250))
-        self.X_POS = .25
+        self.X_POS = .5
         self.Y_POS = .2 
 
 num_trees = 15
@@ -55,7 +55,8 @@ MAPWIDTH = 20
 MAPHEIGHT = 10 
 pygame.init()
 pygame.display.set_caption('LINKS ADVENTURE')
-DISPLAYSURFACE = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE+125))
+# MAPHEIGHT + 125 for inventory
+DISPLAYSURFACE = pygame.display.set_mode((MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
 
 # COLORS
 WHITE = (200, 200, 200)

@@ -4,12 +4,7 @@ import random
 
 rand = random.randint
 
-def UPDATE_ARMED_SPRITE(GAME_ITEMS):
-    for item in GAME_ITEMS:
-        item.POS[0] = PLAYER.PLAYER_POS[0] 
-        item.POS[1] = PLAYER.PLAYER_POS[1] - 1
-
-class SWORD:
+class SWORD():
     def __init__(self):
         self.NAME = 'SWORD'
         self.IMAGE = pygame.image.load('./sprites/sword.png')

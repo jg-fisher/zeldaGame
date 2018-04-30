@@ -1,6 +1,9 @@
 # OSX finder
 *.DS_Store
 
+# VSC
+vscode/
+
 # vim files
 *.swp
 
